@@ -112,33 +112,135 @@ h2{
 }
 
 /* --- ABOUT SECTION --- */
-.about{
+.about {
     background-color: var(--secondary);
+    color: #ffffff;
+    padding: 70px 0;
 }
-.flex-container {
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.about-intro {
+    text-align: center;
+}
+
+.about-intro p {
+    max-width: 680px;
+    margin: 0 auto 20px;
+    font-size: 1.05rem;
+    opacity: 0.9;
+}
+
+.features {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 30px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.features li {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+/* --- CLB SECTION --- */
+.clb-section {
+    background: rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 35px 40px;
+}
+
+.clb-section h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    color: var(--primary);
+}
+
+.clb-section > p {
+    margin-bottom: 20px;
+    opacity: 0.85;
+}
+
+.clb-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.clb-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+}
+
+.clb-badge {
+    background: var(--primary);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.clb-note {
+    border-left: 3px solid var(--primary);
+    padding-left: 15px;
+    opacity: 0.85;
+    font-style: italic;
+    font-size: 0.95rem;
+}
+
+/* --- IMMIGRATION POINTS --- */
+.immigration-points {
+    background: rgba(224, 132, 61, 0.15);
+    border: 1px solid var(--primary);
+    border-radius: 16px;
+    padding: 35px 40px;
+}
+
+.immigration-points h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.points-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.points-list li {
     display: flex;
     align-items: center;
-    gap: 50px;
-    padding: 60px 0;
+    gap: 12px;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
-.text-block, .app-image { flex: 1; }
-.text-block{
-    color: #ffffff;
-}
-
-.app-image img {
-    max-width: 280px;
-    width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-.features{
-    list-style: none;
+.immigration-points > p {
+    opacity: 0.85;
+    font-size: 0.97rem;
 }
 /* --- VIDEO --- */
-.video-section { padding: 60px 0; text-align: center; background-color: #f9f9f9; }
+.video-section { padding: 60px 0; text-align: center; background-color: var(--secondary); color: #ffffff; }
 
 .video-container {
     max-width: 400px;
@@ -176,6 +278,68 @@ video { width: 100%; display: block; }
 }
 
 
+/* --- HEADER QR CODE --- */
+.header-qr img {
+    width: 55px;
+    height: 55px;
+    border: 1px solid #eee;
+    padding: 5px;
+    border-radius: 8px;
+    display: block;
+}
+
+/* --- COMING SOON SECTION --- */
+.coming-soon {
+    padding: 70px 0;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+.coming-soon h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--secondary);
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.coming-intro {
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    opacity: 0.85;
+}
+
+.coming-list {
+    list-style: none;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.coming-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.coming-list li::before {
+    content: "→";
+    color: var(--primary);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.coming-cta {
+    font-size: 1rem;
+    color: var(--secondary);
+    font-weight: 600;
+}
+
 /* --- FOOTER --- */
 footer {
     background: #000;
@@ -189,46 +353,57 @@ footer {
    MOBILE VIEW FIX (MAX-WIDTH: 768px)
    ========================================== */
 @media (max-width: 768px) {
-    /* Center the Hero completely */
     h1 { font-size: 2.2rem; }
-    
+
     .nav-container {
         flex-direction: column;
         gap: 15px;
     }
 
-    /* Keep menu links visible but centered */
+    .header-qr { display: none; }
+
     .menu {
         padding: 0;
         justify-content: center;
         width: 100%;
+        flex-wrap: wrap;
     }
 
-    /* Stack About section elements */
-    .flex-container {
-        flex-direction: column;
-        text-align: center;
+    .clb-section,
+    .immigration-points {
+        padding: 25px 20px;
+    }
+
+    .features {
+        justify-content: center;
+    }
+
+    .coming-list {
+        text-align: left;
+        width: 100%;
+        padding: 0 10px;
     }
 
     /* FIX: Center and scale the Download grid */
     .download-grid {
-        flex-direction: column; /* Stacks QR and Buttons vertically */
+        flex-direction: column;
         width: 100%;
-        gap:0px
+        gap: 0px;
     }
+
     .store-btn img {
-    width: 180px; /* Fixed width to prevent overflow on small screens */
-    height: auto;
-    display:flex
-}
+        width: 180px;
+        height: auto;
+        display: flex;
+    }
+
     .qr-code img {
         display: none;
     }
+
     .store-links {
-        flex-direction: row; /* Keeps buttons side by side */
+        flex-direction: row;
         width: 100%;
         gap: 5px;
     }
-
-    
 }
