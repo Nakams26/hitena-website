@@ -113,7 +113,7 @@ h2{
 
 /* --- ABOUT SECTION --- */
 .about {
-    background-color: var(--secondary);
+    background-color: #3d5f76;
     color: #ffffff;
     padding: 70px 0;
 }
@@ -240,7 +240,7 @@ h2{
     font-size: 0.97rem;
 }
 /* --- VIDEO --- */
-.video-section { padding: 60px 0; text-align: center; background-color: var(--secondary); color: #ffffff; }
+.video-section { padding: 60px 0; text-align: center; background-color: #3d5f76; color: #ffffff; }
 
 .video-container {
     max-width: 400px;
@@ -264,6 +264,23 @@ video { width: 100%; display: block; }
 }
 
 .qr-code img { width: 130px; border: 1px solid #eee; padding: 10px; border-radius: 10px; }
+
+/* Curved orange arrow from title to header QR code */
+.hero-qr-hint {
+    position: absolute;
+    top: 0px;
+    /* aligns arrowhead with center of header QR code at any screen width */
+    right: calc((100% - min(90%, 1100px)) / 2 + 18px);
+    pointer-events: none;
+    animation: bounce-up 1.2s ease-in-out infinite;
+}
+
+@keyframes bounce-up {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.hero { position: relative; }
 
 .store-links {
     display: flex;
@@ -361,6 +378,7 @@ footer {
     }
 
     .header-qr { display: none; }
+    .hero-qr-hint { display: none; }
 
     .menu {
         padding: 0;

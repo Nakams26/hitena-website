@@ -54,15 +54,42 @@
         
         <!-- HERO SECTION: introductory banner with title and call-to-action -->
         <section id="home" class="hero">
+            <div class="hero-qr-hint">
+                <svg width="150" height="130" viewBox="0 0 150 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto">
+                            <path d="M 0 1 L 9 5 L 0 9 Z" fill="#e0843d"/>
+                        </marker>
+                    </defs>
+                    <path d="M 15 115 C 25 142, 130 90, 138 15" stroke="#e0843d" stroke-width="3" stroke-linecap="round" fill="none" marker-end="url(#arrowhead)"/>
+                </svg>
+            </div>
             <div class="wrapper">
                 <!-- Main headline with highlighted accent text -->
                 <h1>Your Path to French <br><span class="accent-text">Certification</span></h1>
-                
+
                 <!-- Short description of the platform -->
                 <p>Master TEF, TCF Canada with Hitena. Start for free and practice speaking, writing, reading, and listening in real exam conditions — upgrade anytime for even more features to level up faster.</p>
-                
+
                 <!-- Button leading users to the download section -->
                 <a href="#download" class="btn primary">Start Free Prep</a>
+            </div>
+        </section>
+
+        <!-- VIDEO SECTION: embedded promotional or tutorial video -->
+        <section id="experience" class="video-section">
+            <div class="wrapper">
+                <h2>Inside the Hitena Experience</h2>
+
+                <!-- Video container with poster image -->
+                <div class="video-container">
+                    <video controls poster="./assets/app.png">
+                        <!-- MP4 video source -->
+                        <source src="./assets/app-video.MP4" type="video/mp4">
+                        <!-- Fallback message for unsupported browsers -->
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
             </div>
         </section>
 
@@ -92,7 +119,7 @@
                         <li><span class="clb-badge">CLB 10–11 (C1)</span> Fluent, professional/academic language, detailed comprehension</li>
                         <li><span class="clb-badge">CLB 12 (C2)</span> Mastery, precise and effortless in any situation</li>
                     </ul>
-                    <p class="clb-note">Important: You don't have to be the same level in every skill. You could be B1 in writing but B2 or even C2 in speaking, reading, or listening. Hitena helps you strengthen each skill individually so you can maximize your points and confidence.</p>
+                    <p class="clb-note">Important: <span style="font-style:normal;">💡</span> You don't have to be the same level in every skill. You could be B1 in writing but B2 or even C2 in speaking, reading, or listening. Hitena helps you strengthen each skill individually so you can maximize your points and confidence.</p>
                 </div>
 
                 <div class="immigration-points">
@@ -138,32 +165,15 @@
         <section id="coming-soon" class="coming-soon">
             <div class="wrapper">
                 <h2>Coming Soon 🚀</h2>
-                <p class="coming-intro">Get ready to take your language skills to the next level with Hitena:</p>
+                <p class="coming-intro">Ready to level up? Unlock your potential with Hitena:</p>
                 <ul class="coming-list">
-                    <li><strong>Find &amp; Talk to a Teacher Live</strong> – real-time guidance whenever you need it</li>
-                    <li><strong>Master C2 Levels</strong> – reach the highest proficiency in French</li>
-                    <li><strong>Master Other Language Exams</strong> – including English and more in the future</li>
+                    <li><strong>Live Tutoring, Anytime, Anywhere</strong> – Find and chat quickly with teachers instantly for personalized support.</li>
+                    <li><strong>Reach the Peak</strong> – Master C2 French and speak with the confidence of a native.</li>
+                    <li><strong>Beyond French</strong> – Ace your English exams soon. Stay tuned for more languages on the horizon!</li>
                 </ul>
-                <p class="coming-cta">Stay tuned and be among the first to practice, improve, and excel with Hitena!</p>
             </div>
         </section>
 
-        <!-- VIDEO SECTION: embedded promotional or tutorial video -->
-        <section id="experience" class="video-section">
-            <div class="wrapper">
-                <h2>Inside the Hitena Experience</h2>
-
-                <!-- Video container with poster image -->
-                <div class="video-container">
-                    <video controls poster="./assets/app.png">
-                        <!-- MP4 video source -->
-                        <source src="./assets/app-video.MP4" type="video/mp4">
-                        <!-- Fallback message for unsupported browsers -->
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- FOOTER SECTION: copyright -->
