@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Athena — Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #e0843d;
+      --secondary: #2f4858;
+      --accent: #ee8b60;
+      --white: #ffffff;
+      --bg: #f7f8fa;
+      --text-dark: #333333;
+      --border: #dde1e7;
+      --success: #2ecc71;
+      --error: #e74c3c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+    header {
+      background: var(--white);
+      padding: 16px 32px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--secondary);
+      font-size: 1.4rem;
+    }
+    header span {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .container {
+      max-width: 780px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+
+    /* STEP PILLS */
+    .steps {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: #aaa;
+      font-weight: 500;
+    }
+    .step-pill .num {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: #dde1e7;
+      color: #aaa;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+    }
+    .step-pill.active .num { background: var(--primary); color: #fff; }
+    .step-pill.active { color: var(--secondary); }
+    .step-pill.done .num { background: var(--success); color: #fff; }
+    .step-pill.done { color: #999; }
+    .step-sep { color: #ccc; font-size: 0.8rem; }
+
+    /* CARD */
+    .card {
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .card h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.1rem;
+      color: var(--secondary);
+      margin-bottom: 20px;
+    }
+
+    /* RADIO BUTTON GROUP */
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .btn-group label {
+      cursor: pointer;
+    }
+    .btn-group input[type=radio] { display: none; }
+    .btn-group .pill {
+      display: inline-block;
+      padding: 9px 20px;
+      border-radius: 30px;
+      border: 2px solid var(--border);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--secondary);
+      transition: all 0.15s;
+      background: #fff;
+      user-select: none;
+    }
+    .btn-group input[type=radio]:checked + .pill {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-group .pill:hover { border-color: var(--accent); }
+
+    /* FORM FIELDS */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid .full { grid-column: 1 / -1; }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      background: #fff;
+      transition: border-color 0.15s;
+      resize: vertical;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .field .hint {
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-top: 4px;
+    }
+
+    /* PREVIEW */
+    .preview-box {
+      background: #f1f4f8;
+      border-radius: 10px;
+      padding: 16px;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: #444;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 340px;
+      overflow-y: auto;
+      border: 1.5px solid var(--border);
+    }
+    .preview-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .doc-name-badge {
+      display: inline-block;
+      background: var(--secondary);
+      color: #fff;
+      font-family: monospace;
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 13px 32px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--secondary);
+      border: 2px solid var(--secondary);
+      padding: 11px 24px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover { background: var(--secondary); color: #fff; }
+
+    /* TOAST */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+      z-index: 999;
+      pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.success { background: var(--success); color: #fff; }
+    #toast.error { background: var(--error); color: #fff; }
+
+    .field input.error, .field select.error, .field textarea.error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(231,76,60,0.15);
+    }
+    .hidden { display: none !important; }
+    .row { display: flex; gap: 12px; align-items: center; margin-top: 20px; }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1.5px solid var(--border);
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Athena Admin</h1>
+  <span>Question Builder</span>
+  <button onclick="resetToHome()" style="margin-left:auto;background:transparent;border:2px solid #2f4858;color:#2f4858;padding:7px 18px;border-radius:20px;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">⌂ Home</button>
+</header>
+
+<div class="container">
+
+  <!-- STEP INDICATOR -->
+  <div class="steps" id="stepIndicator">
+    <div class="step-pill active" id="stepPill1"><div class="num">1</div> Type</div>
+    <div class="step-sep">›</div>
+    <div class="step-pill" id="stepPill2"><div class="num">2</div> Skill</div>
+    <div class="step-sep">›</div>
+    <div class="step-pill" id="stepPill3"><div class="num">3</div> Content</div>
+    <div class="step-sep">›</div>
+    <div class="step-pill" id="stepPill4"><div class="num">4</div> Preview & Push</div>
+  </div>
+
+  <!-- STEP 1: TYPE -->
+  <div class="card" id="step1">
+    <h2>Step 1 — Question type</h2>
+    <div class="btn-group" id="typeGroup">
+      <label><input type="radio" name="qtype" value="regular" /><span class="pill">Regular</span></label>
+      <label><input type="radio" name="qtype" value="test" /><span class="pill">Level Test</span></label>
+      <label><input type="radio" name="qtype" value="mockTest" /><span class="pill">Mock Test</span></label>
+    </div>
+    <div class="row">
+      <button class="btn-primary" id="step1Next" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: SKILL -->
+  <div class="card hidden" id="step2">
+    <h2>Step 2 — Skill</h2>
+    <div class="btn-group" id="skillGroup">
+      <label><input type="radio" name="skill" value="listening" /><span class="pill">Listening</span></label>
+      <label><input type="radio" name="skill" value="reading" /><span class="pill">Reading</span></label>
+      <label><input type="radio" name="skill" value="writing" /><span class="pill">Writing</span></label>
+      <label><input type="radio" name="skill" value="speaking" /><span class="pill">Speaking</span></label>
+    </div>
+    <div class="row">
+      <button class="btn-secondary" onclick="goToStep(1)">← Back</button>
+      <button class="btn-primary" id="step2Next" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: CONTENT FORM -->
+  <div class="card hidden" id="step3">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <h2 id="step3Title" style="margin-bottom:0;">Step 3 — Content</h2>
+      <label id="assessmentToggle" class="hidden" style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.9rem;font-weight:600;color:var(--secondary);">
+        <input type="checkbox" id="f_assessment" onchange="toggleAssessment(this)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--primary);" />
+        Assessment
+      </label>
+    </div>
+    <div id="formFields"></div>
+    <div class="row" style="margin-top:24px;">
+      <button class="btn-secondary" onclick="goToStep(2)">← Back</button>
+      <button class="btn-primary" id="step3Next">Preview →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: PREVIEW & PUSH -->
+  <div class="card hidden" id="step4">
+    <h2>Step 4 — Preview & Push</h2>
+    <div class="preview-label">Document ID</div>
+    <div class="doc-name-badge" id="previewDocName"></div>
+    <div class="preview-label">Collection</div>
+    <div class="doc-name-badge" id="previewCollection" style="background: var(--primary);"></div>
+    <hr class="divider" />
+    <div class="preview-label">Fields</div>
+    <div class="preview-box" id="previewJson"></div>
+    <div class="row" style="margin-top:24px;">
+      <button class="btn-secondary" onclick="goToStep(3)">← Back</button>
+      <button class="btn-primary" id="pushBtn" onclick="pushToFirestore()">Push to Firestore</button>
+      <button class="btn-secondary hidden" id="addAnotherBtn" onclick="addAnother()">+ Add Another</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div id="toast"></div>
+
+<script>
+// ─── State ───────────────────────────────────────────────
+let currentStep = 1;
+let qtype = null;   // regular | test | mockTest
+let skill = null;   // listening | reading | writing | speaking
+
+// Level code → nombre
+const levelMap = { A1:1, A2:2, B1:3, B2:4, C1:5, C2:6 };
+const levelCodes = ['A1','A2','B1','B2','C1','C2'];
+
+// ─── Step navigation ─────────────────────────────────────
+function goToStep(n) {
+  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+  document.getElementById('step'+n).classList.remove('hidden');
+  currentStep = n;
+  updateStepPills();
+}
+
+function updateStepPills() {
+  for (let i = 1; i <= 4; i++) {
+    const pill = document.getElementById('stepPill'+i);
+    pill.classList.remove('active','done');
+    if (i < currentStep) pill.classList.add('done');
+    else if (i === currentStep) pill.classList.add('active');
+  }
+}
+
+// ─── Step 1 ──────────────────────────────────────────────
+document.querySelectorAll('input[name=qtype]').forEach(r => {
+  r.addEventListener('change', () => {
+    qtype = r.value;
+    document.getElementById('step1Next').disabled = false;
+  });
+});
+document.getElementById('step1Next').addEventListener('click', () => goToStep(2));
+
+// ─── Step 2 ──────────────────────────────────────────────
+document.querySelectorAll('input[name=skill]').forEach(r => {
+  r.addEventListener('change', () => {
+    skill = r.value;
+    document.getElementById('step2Next').disabled = false;
+  });
+});
+document.getElementById('step2Next').addEventListener('click', () => {
+  buildForm();
+  goToStep(3);
+});
+
+// ─── Step 3: Dynamic form ─────────────────────────────────
+function buildForm() {
+  const container = document.getElementById('formFields');
+  container.innerHTML = '';
+  document.getElementById('step3Title').textContent = `Step 3 — ${capitalize(skill)} (${capitalize(qtype)})`;
+
+  const toggle = document.getElementById('assessmentToggle');
+  if (qtype === 'regular' || qtype === 'mockTest') {
+    toggle.classList.add('hidden');
+    const cb = document.getElementById('f_assessment');
+    if (cb) { cb.checked = false; toggleAssessment(cb); }
+  } else {
+    toggle.classList.remove('hidden');
+    toggle.style.display = 'flex';
+  }
+
+  if (qtype === 'regular') buildRegularForm(container);
+  else buildTestForm(container);
+}
+
+function field(label, id, type='text', hint='', required=true, extraAttrs='') {
+  const req = required ? 'required' : '';
+  const hintHtml = hint ? `<div class="hint">${hint}</div>` : '';
+  if (type === 'textarea') {
+    return `<div class="field">
+      <label for="${id}">${label}</label>
+      <textarea id="${id}" rows="3" ${req} ${extraAttrs}></textarea>${hintHtml}
+    </div>`;
+  }
+  if (type === 'select') return ''; // handled separately
+  return `<div class="field">
+    <label for="${id}">${label}</label>
+    <input type="${type}" id="${id}" ${req} ${extraAttrs} />
+    ${hintHtml}
+  </div>`;
+}
+
+function selectField(label, id, options, hint='', required=true) {
+  const req = required ? 'required' : '';
+  const hintHtml = hint ? `<div class="hint">${hint}</div>` : '';
+  const opts = options.map(o => {
+    const val = typeof o === 'object' ? o.value : o;
+    const txt = typeof o === 'object' ? o.label : o;
+    return `<option value="${val}">${txt}</option>`;
+  }).join('');
+  return `<div class="field">
+    <label for="${id}">${label}</label>
+    <select id="${id}" ${req}><option value="">— select —</option>${opts}</select>
+    ${hintHtml}
+  </div>`;
+}
+
+function buildRegularForm(container) {
+  let html = '<div class="form-grid">';
+  html += selectField('Level', 'f_level', levelCodes);
+  html += field('Unit', 'f_unit', 'number', 'e.g. 5', true, 'min="1" max="20"');
+  html += field('Order (question number)', 'f_order', 'number', 'e.g. 1, 2, 3…', true, 'min="1"');
+
+  if (skill === 'listening') {
+    html += `<div class="field full"><label>Question</label><textarea id="f_question" rows="2" required></textarea></div>`;
+    html += field('Answer 1', 'f_r1');
+    html += field('Answer 2', 'f_r2');
+    html += field('Answer 3', 'f_r3');
+    html += field('Answer 4', 'f_r4');
+    html += selectField('Correct Answer', 'f_correct', ['1','2','3','4']);
+    html += `<div class="field full"><label>Explanation</label><textarea id="f_explanation" rows="3" required></textarea></div>`;
+    html += `<div class="field full"><label>Audio URL</label><input type="url" id="f_audio" required /><div class="hint">Dropbox raw URL</div></div>`;
+  }
+
+  else if (skill === 'reading') {
+    html += `<div class="field full"><label>Text (passage)</label><textarea id="f_text" rows="4" required></textarea></div>`;
+    html += `<div class="field full"><label>Question</label><textarea id="f_question" rows="2" required></textarea></div>`;
+    html += field('Answer 1', 'f_r1');
+    html += field('Answer 2', 'f_r2');
+    html += field('Answer 3', 'f_r3');
+    html += field('Answer 4', 'f_r4');
+    html += selectField('Correct Answer', 'f_correct', ['1','2','3','4']);
+    html += `<div class="field full"><label>Explanation</label><textarea id="f_explanation" rows="3" required></textarea></div>`;
+  }
+
+  else if (skill === 'writing') {
+    html += `<div class="field full"><label>Question / Topic</label><textarea id="f_question" rows="2" required></textarea></div>`;
+    html += `<div class="field full"><label>Text / Instructions</label><textarea id="f_text" rows="3" required></textarea></div>`;
+  }
+
+  else if (skill === 'speaking') {
+    html += `<div class="field full"><label>Question</label><textarea id="f_question" rows="2" required></textarea></div>`;
+    html += `<div class="field full"><label>Example phrases</label><textarea id="f_text" rows="3" required></textarea></div>`;
+    html += `<div class="field full"><label>Explanation</label><textarea id="f_explanation" rows="2" required></textarea></div>`;
+  }
+
+  html += `<div class="field full"><label>See More <span style="font-weight:400;color:#aaa">(optional)</span></label><textarea id="f_seeMore" rows="2"></textarea></div>`;
+  html += `<div class="field full"><label>See Image URL <span style="font-weight:400;color:#aaa">(optional)</span></label><input type="url" id="f_seeImage" /></div>`;
+  html += '</div>';
+  container.innerHTML = html;
+  attachErrorClearListeners(container);
+}
+
+function buildTestForm(container) {
+  let html = '<div class="form-grid">';
+
+  if (qtype === 'mockTest') {
+    // Mock test: MockT{testNumber}{type} naming
+    html += selectField('Exam Type', 'f_testType', ['TEF','TCF']);
+    html += field('Test Number', 'f_testNumber', 'number', 'e.g. 1, 2, 3…', true, 'min="1"');
+    html += field('Order (question number)', 'f_order', 'number', 'e.g. 1, 2, 3…', true, 'min="1"');
+    html += field('Niveau', 'f_niveau', 'number', 'Fixed to 1 for mock tests', true, 'value="1" readonly style="background:#f1f4f8;color:#aaa;cursor:not-allowed;"');
+  } else {
+    // Regular test: {level}T{testNumber} naming
+    html += selectField('Level', 'f_level', levelCodes);
+    html += field('Test Number', 'f_testNumber', 'number', 'e.g. 1, 2, 3…', true, 'min="1"');
+    html += field('Order (question number)', 'f_order', 'number', 'e.g. 1, 2, 3…', true, 'min="1"');
+    html += selectField('Exam Type', 'f_testType', ['TEF','TCF']);
+  }
+
+  if (skill === 'listening') {
+    html += `<div class="field full"><label>Question</label><textarea id="f_question" rows="2" required></textarea></div>`;
+    html += field('Answer 1', 'f_r1');
+    html += field('Answer 2', 'f_r2');
+    html += field('Answer 3', 'f_r3');
+    html += field('Answer 4', 'f_r4');
+    html += selectField('Correct Answer', 'f_correct', ['1','2','3','4']);
+    html += `<div class="field full"><label>Audio URL</label><input type="url" id="f_audio" required /></div>`;
+    html += `<div class="field full"><label>Image URL (optional)</label><input type="url" id="f_image" /><div class="hint">Leave empty if no image</div></div>`;
+  }
+
+  else if (skill === 'reading') {
+    html += `<div class="field full"><label>Text (passage)</label><textarea id="f_text" rows="4" required></textarea></div>`;
+    html += `<div class="field full"><label>Question</label><textarea id="f_question" rows="2" required></textarea></div>`;
+    html += field('Answer 1', 'f_r1');
+    html += field('Answer 2', 'f_r2');
+    html += field('Answer 3', 'f_r3');
+    html += field('Answer 4', 'f_r4');
+    html += selectField('Correct Answer', 'f_correct', ['1','2','3','4']);
+  }
+
+  else if (skill === 'writing') {
+    html += `<div class="field full"><label>Question / Consigne</label><textarea id="f_question" rows="4" required></textarea></div>`;
+    html += `<div class="field full"><label>AI Evaluator Prompt</label><textarea id="f_prompt" rows="6" required></textarea></div>`;
+  }
+
+  else if (skill === 'speaking') {
+    html += `<div class="field full"><label>Question / Situation</label><textarea id="f_question" rows="4" required></textarea></div>`;
+    html += `<div class="field full"><label>AI Evaluator Prompt</label><textarea id="f_prompt" rows="6" required></textarea></div>`;
+  }
+
+  html += `<div class="field full"><label>See More <span style="font-weight:400;color:#aaa">(optional)</span></label><textarea id="f_seeMore" rows="2"></textarea></div>`;
+  html += `<div class="field full"><label>See Image URL <span style="font-weight:400;color:#aaa">(optional)</span></label><input type="url" id="f_seeImage" /></div>`;
+  html += '</div>';
+  container.innerHTML = html;
+  attachErrorClearListeners(container);
+}
+
+function toggleAssessment(cb) {
+  const el = document.getElementById('f_testNumber');
+  if (!el) return;
+  if (cb.checked) {
+    el.value = 6;
+    el.readOnly = true;
+    el.style.cssText = 'background:#f1f4f8;color:#aaa;cursor:not-allowed;';
+  } else {
+    el.value = '';
+    el.readOnly = false;
+    el.style.cssText = '';
+  }
+}
+
+function attachErrorClearListeners(container) {
+  container.addEventListener('input', e => { if (e.target.classList.contains('error')) e.target.classList.remove('error'); });
+  container.addEventListener('change', e => { if (e.target.classList.contains('error')) e.target.classList.remove('error'); });
+}
+
+
+function buildDocument() {
+  if (qtype === 'regular') return buildRegularDoc();
+  else return buildTestDoc();
+}
+
+function buildRegularDoc() {
+  const level = val('f_level');
+  const unit = parseInt(val('f_unit'));
+  const order = parseInt(val('f_order'));
+  if (!level || !unit || !order) return Promise.resolve(null);
+
+  const niveau = levelMap[level];
+  const unitPad = String(unit).padStart(2,'0');
+  const orderPad = String(order).padStart(2,'0');
+  const docName = `${skill}-${level}U${unitPad}-${orderPad}`;
+  const collection = 'questions' + capitalize(skill);
+  const fields = { niveau, order, unit };
+
+  if (skill === 'listening') {
+    fields.question = val('f_question');
+    fields.reponse1 = val('f_r1');
+    fields.reponse2 = val('f_r2');
+    fields.reponse3 = val('f_r3');
+    fields.reponse4 = val('f_r4');
+    fields.correctReponse = parseInt(val('f_correct'));
+    fields.explanation = val('f_explanation');
+    fields.audio = val('f_audio');
+  } else if (skill === 'reading') {
+    fields.text = val('f_text');
+    fields.question = val('f_question');
+    fields.reponse1 = val('f_r1');
+    fields.reponse2 = val('f_r2');
+    fields.reponse3 = val('f_r3');
+    fields.reponse4 = val('f_r4');
+    fields.correctReponse = parseInt(val('f_correct'));
+    fields.explanation = val('f_explanation');
+  } else if (skill === 'writing') {
+    fields.question = val('f_question');
+    fields.text = val('f_text');
+  } else if (skill === 'speaking') {
+    fields.question = val('f_question');
+    fields.text = val('f_text');
+    fields.explanation = val('f_explanation');
+  }
+  const seeMore = val('f_seeMore');
+  if (seeMore) fields.seeMore = seeMore;
+  const seeImage = val('f_seeImage');
+  if (seeImage) fields.seeImage = seeImage;
+
+  if (!validateFields(fields)) return Promise.resolve(null);
+  return Promise.resolve({ docName, collection, fields });
+}
+
+function buildTestDoc() {
+  const testNumber = parseInt(val('f_testNumber'));
+  const collection = 'questionsTest' + capitalize(skill);
+
+  let prefix, fields;
+
+  const order = parseInt(val('f_order'));
+
+  if (qtype === 'mockTest') {
+    const testType = val('f_testType');
+    const niveau = parseInt(val('f_niveau'));
+    if (!testType || !testNumber || !order || !niveau) return null;
+    prefix = `test${capitalize(skill)}-MockT${testNumber}${testType}-`;
+    fields = { niveau, testNumber, type: testType, mock: true, order };
+  } else {
+    const level = val('f_level');
+    const testType = val('f_testType');
+    if (!level || !testNumber || !order || !testType) return null;
+    const niveau = levelMap[level];
+    prefix = `test${capitalize(skill)}-${level}T${testNumber}-`;
+    fields = { niveau, testNumber, type: testType, mock: false, order };
+  }
+
+  return (async () => {
+    const orderPad = String(order).padStart(2,'0');
+    const docName = `${prefix}${orderPad}`;
+
+    if (skill === 'listening') {
+      fields.question = val('f_question');
+      fields.reponse1 = val('f_r1');
+      fields.reponse2 = val('f_r2');
+      fields.reponse3 = val('f_r3');
+      fields.reponse4 = val('f_r4');
+      fields.correctReponse = parseInt(val('f_correct'));
+      fields.audio = val('f_audio');
+      const img = val('f_image');
+      if (img) fields.linkImage = img;
+    } else if (skill === 'reading') {
+      fields.text = val('f_text');
+      fields.question = val('f_question');
+      fields.reponse1 = val('f_r1');
+      fields.reponse2 = val('f_r2');
+      fields.reponse3 = val('f_r3');
+      fields.reponse4 = val('f_r4');
+      fields.correctReponse = parseInt(val('f_correct'));
+    } else if (skill === 'writing') {
+      fields.question = val('f_question');
+      fields.prompt = val('f_prompt');
+    } else if (skill === 'speaking') {
+      fields.question = val('f_question');
+      fields.prompt = val('f_prompt');
+    }
+    const seeMore = val('f_seeMore');
+    if (seeMore) fields.seeMore = seeMore;
+
+    if (!validateFields(fields)) return null;
+    return { docName, collection, fields };
+  })();
+}
+
+async function fetchNextOrder(collection, prefix) {
+  try {
+    const res = await fetch(`/next-order?collection=${encodeURIComponent(collection)}&prefix=${encodeURIComponent(prefix)}`);
+    const data = await res.json();
+    return data.nextOrder || 1;
+  } catch {
+    return 1;
+  }
+}
+
+function validateFields(fields) {
+  for (const [k, v] of Object.entries(fields)) {
+    if (v === '' || v === null || v === undefined) {
+      showToast(`Field "${k}" is empty`, 'error');
+      return false;
+    }
+  }
+  return true;
+}
+
+function highlightEmptyFields() {
+  const container = document.getElementById('formFields');
+  let hasError = false;
+  container.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      hasError = true;
+    } else {
+      el.classList.remove('error');
+    }
+  });
+  return hasError;
+}
+
+// ─── Step 3 Next (async) ─────────────────────────────────
+// Override click to handle async
+document.getElementById('step3Next').onclick = async () => {
+  highlightEmptyFields();
+  const result = await buildDocument();
+  if (!result) return;
+
+  document.getElementById('previewDocName').textContent = result.docName;
+  document.getElementById('previewCollection').textContent = result.collection;
+  document.getElementById('previewJson').textContent = JSON.stringify(result.fields, null, 2);
+  document.getElementById('addAnotherBtn').classList.add('hidden');
+  document.getElementById('pushBtn').disabled = false;
+  document.getElementById('pushBtn').textContent = 'Push to Firestore';
+  goToStep(4);
+  window._pendingDoc = result;
+};
+
+// ─── Push ─────────────────────────────────────────────────
+async function pushToFirestore() {
+  const doc = window._pendingDoc;
+  if (!doc) return;
+
+  const btn = document.getElementById('pushBtn');
+  btn.disabled = true;
+  btn.textContent = 'Pushing…';
+
+  try {
+    const res = await fetch('/push', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(doc)
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      showToast(`✓ "${data.docName}" pushed successfully!`, 'success');
+      btn.textContent = '✓ Pushed!';
+      document.getElementById('addAnotherBtn').classList.remove('hidden');
+    } else {
+      showToast(data.error || 'Unknown error', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Push to Firestore';
+    }
+  } catch (err) {
+    showToast('Network error: ' + err.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Push to Firestore';
+  }
+}
+
+function addAnother() {
+  // Save sticky fields before rebuilding
+  const saved = {};
+  ['f_level','f_unit','f_order','f_testNumber','f_testType','f_niveau'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) saved[id] = el.value;
+  });
+  const assessEl = document.getElementById('f_assessment');
+  if (assessEl) saved['f_assessment'] = assessEl.checked;
+
+  buildForm();
+  goToStep(3);
+
+  // Restore sticky fields (everything except order)
+  ['f_level','f_unit','f_testNumber','f_testType','f_niveau'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && saved[id]) el.value = saved[id];
+  });
+  // Restore assessment checkbox state
+  const assessElRestored = document.getElementById('f_assessment');
+  if (assessElRestored && saved['f_assessment']) {
+    assessElRestored.checked = true;
+    toggleAssessment(assessElRestored);
+  }
+  // Increment order by 1
+  const orderEl = document.getElementById('f_order');
+  if (orderEl && saved['f_order']) orderEl.value = parseInt(saved['f_order']) + 1;
+}
+
+// ─── Helpers ──────────────────────────────────────────────
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function resetToHome() {
+  qtype = null;
+  skill = null;
+  document.querySelectorAll('input[name=qtype], input[name=skill]').forEach(r => r.checked = false);
+  document.getElementById('step1Next').disabled = true;
+  document.getElementById('step2Next').disabled = true;
+  document.getElementById('assessmentToggle').classList.add('hidden');
+  const cb = document.getElementById('f_assessment');
+  if (cb) { cb.checked = false; toggleAssessment(cb); }
+  goToStep(1);
+}
+
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `show ${type}`;
+  setTimeout(() => { t.className = ''; }, 3500);
+}
+</script>
+</body>
+</html>
