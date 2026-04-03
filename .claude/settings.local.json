@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmdkey:*)",
+      "Bash(git push:*)",
+      "Bash(git config:*)",
+      "Bash(gh auth:*)",
+      "Bash(git commit:*)",
+      "Bash(npm install:*)",
+      "Bash(ls:*)",
+      "Bash(node admin-server.js)",
+      "Bash(curl -s http://localhost:3333/admin)",
+      "Bash(grep:*)",
+      "Bash(netstat -ano)"
+    ]
+  }
+}
